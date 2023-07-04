@@ -230,6 +230,25 @@ to the credentials. Note that PVE `supports Let's Encrypt`_ out ouf the box. In
 many cases setting up trusted certificates is the better option than operating
 with self-signed certs.
 
+**Using a custom certificate authority:**
+
+If you sign certificates using your own CA, you will need to install the CA 
+certificate in the local trust store. Here is an example of extending our 
+docker alpine image.
+
+.. code:: Dockerfile
+
+    FROM prompve/prometheus-pve-exporter:latest
+
+    USER root
+
+    RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+    COPY ./my_root_ca.crt /usr/local/share/ca-certificates
+    RUN update-ca-certificates
+
+    USER nobody
+
+
 Proxmox VE Configuration
 ------------------------
 
